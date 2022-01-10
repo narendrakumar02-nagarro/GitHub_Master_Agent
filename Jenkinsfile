@@ -9,6 +9,10 @@ pipeline {
             )
     }
 
+    tools {
+    maven 'maven-3.6.3' 
+  }
+ 
     stages {
         
         
@@ -21,15 +25,12 @@ pipeline {
                 ])
             }
         }
-        stage('Cleanup Workspace') {
-            steps {
-                cleanWs()
-                sh """
-                echo "Cleaned Up Workspace For Project"
-                """
-            }
-        }
-
+        
+         stage ('Build') {
+      steps {
+        sh 'mvn clean package'
+      }
+    }
         stage(' Unit Testing') {
             steps {
                 sh """
