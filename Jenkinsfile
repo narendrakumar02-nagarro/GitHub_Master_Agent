@@ -11,15 +11,7 @@ pipeline {
 
     stages {
         
-        stage('Cleanup Workspace') {
-            steps {
-                cleanWs()
-                sh """
-                echo "Cleaned Up Workspace For Project"
-                """
-            }
-        }
-
+        
         stage('Code Checkout') {
             steps {
                 checkout([
@@ -27,6 +19,14 @@ pipeline {
                     branches: [[name: '*/master']], 
                     userRemoteConfigs: [[url: 'https://github.com/narendrakumar02/AQTPracticeData.git']]
                 ])
+            }
+        }
+        stage('Cleanup Workspace') {
+            steps {
+                cleanWs()
+                sh """
+                echo "Cleaned Up Workspace For Project"
+                """
             }
         }
 
