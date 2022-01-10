@@ -2,7 +2,7 @@ pipeline {
 
     agent {
         node {
-            label 'window'
+            label 'agent any'
         }
     }
 
