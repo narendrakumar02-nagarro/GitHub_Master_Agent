@@ -1,6 +1,11 @@
 pipeline {
 
-    agent any
+    agent
+    {
+        docker {
+            image 'maven:3.8.1-adoptopenjdk-11' 
+        }
+    }
     
     options {
         buildDiscarder logRotator( 
@@ -9,9 +14,7 @@ pipeline {
             )
     }
  
-    tools{
-        maven "Maven3"
-    }
+    
     stages {
         
         
