@@ -1,39 +1,37 @@
 pipeline {
 
     agent {
-        node {
-            label 'master'
+        docker {
+            image 'maven:3.8.1-adoptopenjdk-11' 
+            args '-v /root/.m2:/root/.m2' 
         }
     }
-
+    
     options {
         buildDiscarder logRotator( 
                     daysToKeepStr: '16', 
                     numToKeepStr: '10'
             )
     }
-
+ 
     stages {
         
-        stage('Cleanup Workspace') {
-            steps {
-                cleanWs()
-                sh """
-                echo "Cleaned Up Workspace For Project"
-                """
-            }
-        }
-
+        
         stage('Code Checkout') {
             steps {
                 checkout([
                     $class: 'GitSCM', 
-                    branches: [[name: '*/main']], 
-                    userRemoteConfigs: [[url: 'https://github.com/spring-projects/spring-petclinic.git']]
+                    branches: [[name: '*/master']], 
+                    userRemoteConfigs: [[url: 'https://github.com/narendrakumar02/AQTPracticeData.git']]
                 ])
             }
         }
-
+        
+         stage ('Build') {
+      steps {
+        sh 'mvn clean package'
+      }
+    }
         stage(' Unit Testing') {
             steps {
                 sh """
