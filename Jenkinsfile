@@ -15,19 +15,7 @@ pipeline {
     }
  
     
-    stages {
-        
-        
-        stage('Code Checkout') {
-            steps {
-                checkout([
-                    $class: 'GitSCM', 
-                    branches: [[name: '*/master']], 
-                    userRemoteConfigs: [[url: 'https://github.com/narendrakumar02/AQTPracticeData.git']]
-                ])
-            }
-        }
-        
+    stages {        
          stage ('Build') {
       steps {
         sh 'mvn clean package'
