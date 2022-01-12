@@ -14,9 +14,10 @@ pipeline {
     }
     
      stage('SonarQube analysis') {
+         steps{
     withSonarQubeEnv(credentialsId: '0339bade8f18d1aa50ed6b6f7dba5fdc7d288577', installationName: 'Jenkins') { // You can override the credential to be used
       bat 'mvn org.sonarsource.scanner.maven:sonar-maven-plugin:3.7.0.1746:sonar'
-    }
+    }}
  
     }
     stage('Cloning Git') {
