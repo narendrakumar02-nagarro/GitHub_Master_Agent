@@ -19,7 +19,7 @@ pipeline {
            
     }
     stage('Cloning Git') {
-      steps {
+     steps {
         git 'https://github.com/narendrakumar02/AQTPracticeData.git'
       }
     }
@@ -31,10 +31,14 @@ pipeline {
         }
       }
     }
-    stage('Deliver') {
-            steps {
-                bat './jenkins/scripts/deliver.bat'
-            }
+    stage('Deploy Image') {
+      steps{
+        script {
+          docker.withRegistry( '', registryCredential ) {
+            dockerImage.push()
+          }
         }
+      }
+    }
     }
 }
