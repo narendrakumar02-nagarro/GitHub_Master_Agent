@@ -36,7 +36,7 @@ pipeline {
         script {
           docker.withRegistry( '', registryCredential ) {
             dockerImage.push()
-            docker run -d -p 80:80 registry
+            bat docker run -d -p 80:80 registry
           }
         }
       }
