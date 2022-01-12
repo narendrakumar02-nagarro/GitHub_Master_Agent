@@ -9,7 +9,7 @@ pipeline {
     stages {
     stage('Build') { 
             steps {
-                bat 'mvn clean package' 
+                mvn clean package 
             }
     }
     stage('Test') {
@@ -36,7 +36,7 @@ pipeline {
         script {
           docker.withRegistry( '', registryCredential ) {
             dockerImage.push()
-            bat docker run -d -p 80:80 registry
+            
           }
         }
       }
