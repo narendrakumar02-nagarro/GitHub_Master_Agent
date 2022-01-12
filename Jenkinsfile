@@ -7,9 +7,9 @@ pipeline {
   }
     agent any
     stages {
-    stage('Build') { 
+    stage('Build and Analysis') { 
             steps {
-                mvn clean package 
+               bat 'mvn clean package sonar:sonar' 
             }
     }
     stage('Test') {
