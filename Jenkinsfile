@@ -1,5 +1,5 @@
 pipeline {
-    {
+    
   environment {
     registry = "narendrakumar02/aqt_practice_data"
     registryCredential = 'Docker_Token'
