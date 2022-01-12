@@ -1,57 +1,10 @@
 pipeline {
-
-    agent
-    {
-        docker {
-            image 'maven:3.8.1-adoptopenjdk-11' 
-            args '-v//root/.m2:/root/.m2'
-        }
+node {
+    def customImage
+    stage ('Checkout'){
+        checkout scm
     }
-    
-    options {
-        buildDiscarder logRotator( 
-                    daysToKeepStr: '16', 
-                    numToKeepStr: '10'
-            )
+    stage ('Build'){
+        customImage = docker.build("my-image:${env.BUILD_ID}")
     }
- 
-    
-    stages {        
-         stage ('Build') {
-      steps {
-        sh 'mvn clean package'
-      }
-    }
-        stage(' Unit Testing') {
-            steps {
-                sh """
-                echo "Running Unit Tests"
-                """
-            }
-        }
-
-        stage('Code Analysis') {
-            steps {
-                sh """
-                echo "Running Code Analysis"
-                """
-            }
-        }
-
-        stage('Build Deploy Code') {
-            when {
-                branch 'develop'
-            }
-            steps {
-                sh """
-                echo "Building Artifact"
-                """
-
-                sh """
-                echo "Deploying Code"
-                """
-            }
-        }
-
-    }   
-}
+}}
