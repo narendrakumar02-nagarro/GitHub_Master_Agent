@@ -1,18 +1,37 @@
 pipeline {
+    {
+  environment {
+    registry = "narendrakumar02/aqt_practice_data"
+    registryCredential = 'Docker_Token'
+    dockerImage = ''
+  }
     agent any
     stages {
-        stage('Build') { 
+    stage('Build') { 
             steps {
                 bat 'mvn clean package' 
             }
-        }
-        stage('Test') {
+    }
+    stage('Test') {
             steps {
                 bat 'mvn test'
             }
            
+    }
+    stage('Cloning Git') {
+      steps {
+        git 'https://github.com/narendrakumar02/AQTPracticeData.git'
+      }
+    }
+    
+    stage('Building image') {
+      steps{
+        script {
+          dockerImage = docker.build registry + ":$BUILD_NUMBER"
         }
-        stage('Deliver') {
+      }
+    }
+    stage('Deliver') {
             steps {
                 bat './jenkins/scripts/deliver.bat'
             }
