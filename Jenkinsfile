@@ -2,7 +2,7 @@ pipeline {
 
     agent {
    
-            label 'slave'
+            label 'docker-agent'
     }
     options {
         buildDiscarder logRotator( 
