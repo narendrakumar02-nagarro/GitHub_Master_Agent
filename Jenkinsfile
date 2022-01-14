@@ -20,7 +20,6 @@ pipeline {
     }
   }
  
-    }
     stage('Cloning Git') {
      steps {
         git 'https://github.com/narendrakumar02/AQTPracticeData.git'
