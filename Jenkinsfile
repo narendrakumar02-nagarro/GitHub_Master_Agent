@@ -10,7 +10,7 @@ pipeline {
     stages {
     stage('Build and Analysis') { 
             steps {
-               bat 'mvn clean package' 
+               bat 'mvn clean package sonar:sonar' 
             }
     }
     
