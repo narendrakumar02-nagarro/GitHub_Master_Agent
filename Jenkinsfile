@@ -61,7 +61,7 @@ buildInfo.env.capture = true
         script {
           docker.withRegistry( '', registryCredential ) {
             dockerImage.push()
-            
+            docker run -d -p 8090 ${dockerImage}
           }
         }
       }
