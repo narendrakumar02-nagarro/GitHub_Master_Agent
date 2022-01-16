@@ -17,7 +17,7 @@ pipeline {
     stage('SonarQube analysis') {
        steps{
     withSonarQubeEnv('sonarqube-9.2.4.50792') { // If you have configured more than one global server connection, you can specify its name
-    bat "C:\Users\narendrakumar02\Downloads\sonarqube-9.2.4.50792\sonarqube-9.2.4.50792\bin\windows-x86-64\StartSonar"
+    bat "C:/Users/narendrakumar02/Downloads/sonarqube-9.2.4.50792/sonarqube-9.2.4.50792/bin/windows-x86-64/StartSonar"
     }
   }
    } 
