@@ -22,7 +22,21 @@ pipeline {
        }
        }
         
+stage('upload') {
+           steps {
+              script { 
+                 def server = Artifactory.server 'art-1'
+                 def uploadSpec = """{
+                    "files": [{
+                       "pattern": "path/",
+                       "target": "path/"
+                    }]
+                 }"""
 
+                 server.upload(uploadSpec) 
+               }
+            }
+        }
     stage('Cloning Git') {
      steps {
         git 'https://github.com/narendrakumar02/AQTPracticeData.git'
@@ -41,7 +55,7 @@ pipeline {
         script {
           docker.withRegistry( '', registryCredential ) {
             dockerImage.push()
-            docker run -d -p 8090 ${dockerImage}
+           // docker run -d -p 8090 ${dockerImage}
           }
         }
       }
