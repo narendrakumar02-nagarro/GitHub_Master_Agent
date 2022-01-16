@@ -8,7 +8,7 @@ pipeline {
   }
     agent any
     stages {
-    stage('Build and Analysis') { 
+    stage('Build') { 
             steps {
                bat 'mvn clean package' 
             }
@@ -19,8 +19,10 @@ pipeline {
     
     bat 'mvn sonar:sonar'
     
-  }
-        stage('Artifactory configuration'){
+       }
+       }
+        
+stage('Artifactory configuration'){
 
 steps {
 
