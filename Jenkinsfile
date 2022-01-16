@@ -16,9 +16,9 @@ pipeline {
     
     stage('SonarQube analysis') {
        steps{
-    withSonarQubeEnv('sonarqube-9.2.4.50792') { // If you have configured more than one global server connection, you can specify its name
+    
     bat 'mvn sonar:sonar'
-    }
+    
   }
    } 
     stage('Cloning Git') {
