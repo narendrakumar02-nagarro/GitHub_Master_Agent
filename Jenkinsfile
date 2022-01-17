@@ -53,8 +53,8 @@ stage('upload') {
   def rtMaven = Artifactory.newMavenBuild()
   //rtMaven.tool = MAVEN_TOOL // Tool name from Jenkins configuration
   rtMaven.opts = "-Denv=dev"
-  rtMaven.deployer releaseRepo:'libs-release-local', snapshotRepo:'libs-snapshot-local', server: server
-  rtMaven.resolver releaseRepo:'libs-release', snapshotRepo:'libs-snapshot', server: server
+  rtMaven.deployer releaseRepo:'example-repo-local', snapshotRepo:'example-repo-local', server: server
+  //rtMaven.resolver releaseRepo:'libs-release', snapshotRepo:'libs-snapshot', server: server
 
   rtMaven.run pom: 'pom.xml', goals: 'clean install', buildInfo: buildInfo
 
