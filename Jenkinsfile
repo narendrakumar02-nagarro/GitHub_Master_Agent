@@ -33,7 +33,7 @@ stage('upload') {
                     //}]
                  //}"""
 
-                 server.upload(uploadSpec) 
+                 server.upload() 
                }
             }
         }
