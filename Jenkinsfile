@@ -11,7 +11,7 @@ pipeline {
     stage('Build') { 
             steps {
                bat 'mvn clean package' 
-            }
+            }   
     }
     
     stage('SonarQube analysis') {
@@ -24,7 +24,7 @@ pipeline {
         
 stage('upload') {
            steps {
-               script { /*
+               script { 
                  def server = Artifactory.server 'Artifactory'
                  def uploadSpec = """{
                     "files": [{
@@ -33,24 +33,11 @@ stage('upload') {
      }]
                  }"""
 
-                 server.upload(uploadSpec) */
+                 server.upload(uploadSpec) 
                   
                   
                
-    def server = Artifactory.server "Artifactory"
-  def buildInfo = Artifactory.newBuildInfo()
-  buildInfo.env.capture = true
-  def rtMaven = Artifactory.newMavenBuild()
-  rtMaven.tool = MAVEN_TOOL // Tool name from Jenkins configuration
-  rtMaven.opts = "-Denv=dev"
-  rtMaven.deployer releaseRepo:'example-repo-local', snapshotRepo:'libs-snapshot-local', server: server
-  rtMaven.resolver releaseRepo:'example-repo', snapshotRepo:'libs-snapshot', server: server
-
-  rtMaven.run pom: 'pom.xml', goals: 'clean install', buildInfo: buildInfo
-
-  buildInfo.retention maxBuilds: 10, maxDays: 7, deleteBuildArtifacts: true
-  // Publish build info.
-  server.publishBuildInfo buildInfo
+    
            }
             }
         }
