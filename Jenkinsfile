@@ -28,9 +28,9 @@ stage('upload') {
                  def server = Artifactory.server 'Artifactory'
                  def uploadSpec = """{
                     "files": [{
-                     "pattern": "resources/*.zip",
-      "target": "my-repo/zip/",
-                    }]
+                     "pattern": "artifactory-build-info/",
+                     "target": "example-repo-local/"
+     }]
                  }"""
 
                  server.upload(uploadSpec) 
