@@ -26,12 +26,12 @@ stage('upload') {
            steps {
               script { 
                  def server = Artifactory.server 'Artifactory'
-                 //def uploadSpec = """{
-                  //  "files": [{
-                    //   "pattern": "path/",
-                      // "target": "path/"
-                    //}]
-                 //}"""
+                 def uploadSpec = """{
+                    "files": [{
+                      "pattern": "path/",
+                       "target": "path/"
+                    }]
+                 }"""
 
                  server.upload() 
                }
