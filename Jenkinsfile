@@ -25,7 +25,11 @@ pipeline {
 stage('upload') {
            steps {
                script { 
-                 def server = Artifactory.server 'Artifactory'
+                /* def server = Artifactory.server 'Artifactory'
+                 def buildInfo = Artifactory.newBuildInfo()
+                 buildInfo.env.capture = true
+                 buildInfo.env.collect()
+
                  def uploadSpec = """{
                     "files": [{
             "pattern": "**/target/*.jar",
@@ -39,8 +43,24 @@ stage('upload') {
           }]
                  }"""
 
-                 server.upload(uploadSpec) 
-                  
+         server.upload spec: uploadSpec, buildInfo: buildInfo
+         buildInfo.retention maxBuilds: 10, maxDays: 7, deleteBuildArtifacts: true
+         server.publishBuildInfo buildInfo      *\
+         
+         def server = Artifactory.server "Artifactory"
+  def buildInfo = Artifactory.newBuildInfo()
+  buildInfo.env.capture = true
+  def rtMaven = Artifactory.newMavenBuild()
+  //rtMaven.tool = MAVEN_TOOL // Tool name from Jenkins configuration
+  rtMaven.opts = "-Denv=dev"
+  rtMaven.deployer releaseRepo:'libs-release-local', snapshotRepo:'libs-snapshot-local', server: server
+  rtMaven.resolver releaseRepo:'libs-release', snapshotRepo:'libs-snapshot', server: server
+
+  rtMaven.run pom: 'pom.xml', goals: 'clean install', buildInfo: buildInfo
+
+  buildInfo.retention maxBuilds: 10, maxDays: 7, deleteBuildArtifacts: true
+  // Publish build info.
+  server.publishBuildInfo buildInfo
                   
                
     
