@@ -9,12 +9,12 @@ pipeline {
     agent any
     
     stages {
-        stage('Cloning Git') {
+        stage('Git Checkout') {
      steps {
         git 'https://github.com/narendrakumar02/AQTPracticeData.git'
       }
     }
-        stage('Build') {
+        stage('Building Project') {
             steps {
                 bat 'mvn clean package'
                   }   
@@ -28,7 +28,7 @@ pipeline {
        }
        }
         
-stage('upload') {
+stage('Uploading Artifacts') {
            steps {
                script { 
                  def server = Artifactory.server 'Artifactory'
@@ -61,14 +61,14 @@ stage('upload') {
         }
     
     
-    stage('Building image') {
+    stage('Building Docker Image') {
       steps{
         script {
           dockerImage = docker.build registry + ":$BUILD_NUMBER"
         }
       }
     }
-    stage('Deploy Image') {
+    stage('Pushing Docker-Image to DockerHub') {
       steps{
         script {
           docker.withRegistry( '', registryCredential ) {
