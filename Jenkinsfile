@@ -45,7 +45,7 @@ stage('upload') {
 
          server.upload spec: uploadSpec, buildInfo: buildInfo
          buildInfo.retention maxBuilds: 10, maxDays: 7, deleteBuildArtifacts: true
-         server.publishBuildInfo buildInfo      *\
+         server.publishBuildInfo buildInfo      */
          
          def server = Artifactory.server "Artifactory"
   def buildInfo = Artifactory.newBuildInfo()
