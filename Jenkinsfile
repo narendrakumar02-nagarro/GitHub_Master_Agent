@@ -32,16 +32,6 @@ pipeline {
             }
         }
 
-        stage('Code Checkout') {
-            steps {
-                checkout([
-                    $class: 'GitSCM', 
-                    branches: [[name: '*/dovelop/test']], 
-                    userRemoteConfigs: [[url: 'https://github.com/narendrakumar02/AQTPracticeData.git']]
-                ])
-            }
-        }
-
         stage(' Unit Testing') {
             steps {
                 sh """
