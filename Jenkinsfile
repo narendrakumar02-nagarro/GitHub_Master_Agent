@@ -1,67 +1,71 @@
 pipeline {
-
-    agent {
-   
-            label 'java-docker-slave'
-    }
-   /* options {
-        buildDiscarder logRotator( 
-                    daysToKeepStr: '16', 
-                    numToKeepStr: '10'
-            )
-    }       */
-
+    environment {
+        registry = "narendrakumar02/aqt_practice_data"
+        registryCredential = 'Docker_Token'
+        dockerImage = ''
+        //scannerHome = tool 'SonarScanner 4.0'
+               }
+    
+    agent any
+    
     stages {
+        stage('Building Project') {
+            steps {
+                bat 'mvn clean package'
+                  }   
+                                  }
+    
         
-        stage('Code Checkout') {
-            steps {
-                checkout([
-                    $class: 'GitSCM', 
-                    branches: [[name: '*/dovelop/test']], 
-                    userRemoteConfigs: [[url: 'https://github.com/narendrakumar02/AQTPracticeData.git']]
-                ])
-            }
-        }
+        stage('SonarQube Analysis') {
+            steps{
+                bat 'mvn sonar:sonar'
+                 }
+                                    }
+        
+       stage('Uploading Artifacts') {
+           steps {
+               script {
+                   def server = Artifactory.server 'Artifactory'
+                   def buildInfo = Artifactory.newBuildInfo()
+                   buildInfo.env.capture = true
+                   buildInfo.env.collect()
 
-        stage('Cleanup Workspace') {
-            steps {
-                cleanWs()
-                bat """
-                echo "Cleaned Up Workspace For Project"
-                """
-            }
-        }
-
-        stage(' Unit Testing') {
-            steps {
-                bat """
-                echo "Running Unit Tests"
-                """
-            }
-        }
-
-        stage('Code Analysis') {
-            steps {
-                bat """
-                echo "Running Code Analysis"
-                """
-            }
-        }
-
-        stage('Build Deploy Code') {
-            when {
-                branch 'develop'
-            }
-            steps {
-                bat """
-                echo "Building Artifact"
-                """
-
-                bat """
-                echo "Deploying Code"
-                """
-            }
-        }
-
-    }   
-}
+                   def uploadSpec = """{
+                       "files": [{
+                           "pattern": "**/target/*.jar",
+                           "target": "example-repo-local" },
+                                 {
+                          "pattern": "**/target/*.pom",
+                          "target": "example-repo-local"},
+                                 {
+                          "pattern": "**/target/*.war",
+                          "target": "example-repo-local"
+                                }]
+                                   }"""
+                   
+                   server.upload spec: uploadSpec, buildInfo: buildInfo
+                   server.publishBuildInfo buildInfo      
+                       }
+                   }
+                                   }
+    
+    
+    stage('Building Docker Image') {
+        steps {
+            script {
+                dockerImage = docker.build registry + ":$BUILD_NUMBER"
+                   }
+              }
+                                   }
+    stage('Pushing Docker-Image to DockerHub') {
+        steps {
+            script {
+                docker.withRegistry( '', registryCredential ) {
+                dockerImage.push()
+             // docker run -d -p 8090 ${dockerImage}
+                                                              }
+                   }
+              }
+                                               }
+          }
+     }
