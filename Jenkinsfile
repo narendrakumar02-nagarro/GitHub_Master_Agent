@@ -13,7 +13,12 @@ pipeline {
             steps {
                 bat 'mvn clean package'
                   }   
-                                  }
+         post {
+       always {
+           jiraSendBuildInfo site: 'narendrakumar02.atlassian.net'
+       }
+   }                              
+        }
     
         
         stage('SonarQube Analysis') {
